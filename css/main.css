@@ -2125,7 +2125,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #856288;
+  background: #fffff5;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3050,13 +3050,16 @@ embed {
 }
 .posts-expand .post-meta {
   color: #555;
-  margin: 20px 0;
+  margin: 10px 0;
 }
 .post-body .post-button {
   margin-top: 20px;
 }
 .post-footer .post-eof {
   margin: 5px auto;
+}
+p.description {
+  margin: 5px 0 0 5px !important;
 }
 .post {
   margin-top: 60px;
@@ -3091,6 +3094,9 @@ p.description {
   font-size: 15px;
   box-shadow: inset 0px 0px 10px 0px rgba(0,0,0,0.35);
   background-image: linear-gradient(90deg, #cbe3ef 0%, #dbdfe7 25%, #cbe3ef 50%, #dbdfe7 75%, #cbe3ef 100%);
+}
+.footer {
+  color: #555;
 }
 ::-webkit-scrollbar {
   width: 5px;

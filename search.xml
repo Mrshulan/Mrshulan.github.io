@@ -1,32 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-    
-    <entry>
-      <title>blogtest</title>
-      <link href="/2018/08/27/blogtest/"/>
-      <url>/2018/08/27/blogtest/</url>
-      
-        <content type="html"><![CDATA[<p><img src="https://desk-fd.zol-img.com.cn/t_s960x600c5/g5/M00/03/00/ChMkJlhvFDCIWv0mAAaVhLKmP0wAAZIogMcf1wABpWc614.jpg" alt="" style="width:100%"></p><a id="more"></a> <p>​                                                                  大晚上的👇</p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=35270898&auto=1&height=66"></iframe>]]></content>
-      
-      
+<search>
+  <entry>
+    <title><![CDATA[blogtest]]></title>
+    <url>%2F2018%2F08%2F27%2Fblogtest%2F</url>
+    <content type="text"><![CDATA[​ 大晚上的👇]]></content>
       <categories>
-          
-          <category> travel </category>
-          
+        <category>travel</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 摄影 </tag>
-            
-            <tag> 旅行 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-  
-  
+      <tags>
+        <tag>摄影</tag>
+        <tag>旅行</tag>
+      </tags>
+  </entry>
 </search>

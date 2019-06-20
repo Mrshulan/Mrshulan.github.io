@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mrshulan.com/"/>
-  <updated>2019-04-11T05:25:12.594Z</updated>
+  <updated>2019-06-20T13:49:41.294Z</updated>
   <id>https://mrshulan.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>NPM一知半解</title>
+    <link href="https://mrshulan.com/2019/06/20/NPM%E4%B8%80%E7%9F%A5%E5%8D%8A%E8%A7%A3/"/>
+    <id>https://mrshulan.com/2019/06/20/NPM一知半解/</id>
+    <published>2019-06-20T13:43:33.000Z</published>
+    <updated>2019-06-20T13:49:41.294Z</updated>
+    
+    <content type="html"><![CDATA[<p class="description"></p><p><img src="http://qiniu.mrshulan.com/npminstall%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="" style="width:100%"></p><a id="more"></a><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>之前对于npm 的理解停留在 npm是个包管理器，是一个开源的社区, github不是也是开源的吗，他怎么不要你down(现在确实可以了，微软爸爸有钱hmm)，npm install -g / -D / -S 然后还有个package.json 还有这package-lock.json， package-lock.json这货我不知道有啥用, npm出现, cnpm不出现，删了也没事，上传到了github上面，过一阵给我报警，警告就算了， 天天给我发邮箱，神烦，所以今天就来趴一趴npm的历史。</p><h3 id="NPM常用命令回顾"><a href="#NPM常用命令回顾" class="headerlink" title="NPM常用命令回顾"></a>NPM常用命令回顾</h3><ul><li>npm init [-y]<ul><li>生成了个package.json, 这文件从npm刚出生就一直有</li></ul></li><li>npm i [-g] [-D] [-S]<ul><li>g D S 干啥用的，就不具体说了，顶多说出个路径，本地，线上的区别来</li></ul></li><li>npm uninstall</li><li>npm run …<ul><li>package.json script这一项，create-react-app里边也不是没玩过</li></ul></li><li>npm cache clean [—force]<ul><li>有时候安装出错了，大概率就是需要这样了，或者再不行，rm -rf走起</li></ul></li><li>npm audit fix<ul><li>在今天之前，对这个也没上心，等他提示我需要这样的时候，我就这样</li></ul></li><li>npm update<ul><li>semver(版本规则)提上一嘴，major.minor.patch(主版本.小版本.修订版本) 一般来说开发者 publish 时候都会整明白</li><li>package.json 一些版本符号 ^(major)  ~(major.minor)基准</li><li>update为啥有时候就是up不了， 待会说待会说</li></ul></li></ul><h3 id="NPM23456"><a href="#NPM23456" class="headerlink" title="NPM23456"></a>NPM23456</h3><p>每个大版本的，肯定都会有性能增强集成优化这我就不说，先从npm2说起吧，</p><ul><li><p>npm2</p><ul><li>npm层次递归生成依赖树，讲到这里我想起了webpack那张图谱…，这个依赖树极其简单，比方说A需要B的存在 C需要B和D的存在，顶层node_module你只能看见 A和B， C和D你得往里边，这样带来的好处就是，需要啥看的一清二楚and后边提到的骚操作。</li></ul><p>​       不知道是否可以思考出，这样做的直接后果就是 造成大量的依赖树冗余(重复安装)</p><ul><li>node_module与package.json的关系不是那么亲密，自己改一下node_module 没问题，照样require，</li></ul></li><li><p>npm3</p><p>迫于解决上面的问题，搞出了一套算法，以package.json为核心安装node_module, 将重复的安装项抽离(原则靠近顶层)出来，按照先后顺序避免@版本冲突,最终计算出合理的文件夹安装方式。</p><p>举个栗子:</p><ul><li>A(B, C) B(C) C(D) =&gt; </li></ul><blockquote><p>A</p><p>+—B</p><p>+—C(看这里)</p><p>+—D</p></blockquote><ul><li>A(B, C) B(C, D@1) C(D@2)</li></ul><blockquote><p>A</p><p>+—B</p><p>+—C</p><p>​    +—D@2(看这里)</p><p>+—D@1(看这里)</p></blockquote><p>在仔细想想有个问题</p><p>在处理深拷贝容易忽略的一个问题是啥，没啥，就是解决死循环问题</p><blockquote><p>(A -&gt; B -&gt; A1 -&gt; B1 )  -&gt; A -&gt; B -&gt;….</p><p>都成周期函数了…</p></blockquote><p>不对 还有一个问题…</p><p>这个npm update听谁的，</p><ul><li>npm install 默认会往 最新的 install 这可不是我们希望的， 因为一个主动 一个是被动，而且版本记录的问题…..</li></ul></li><li><p>npm5 (为何没有没有npm4…  我问一哈，你可以买到 一加4 嘛)</p><p>为了解决上面的问题，npm5出了一把锁，也就是开头我说的package-lock.json(这里边啥 可以和 node_module, 也就是你安装的Dependencies 对比一哈)，可千万不要手动改package-lock.json这样是非常不明智的，哦对了 还出了一个 shrinkwrap, 不过这个是手动挡，也没玩过，所以就不扯他，那到底是怎么解决上面的问题的呢，我说一下，</p><ul><li>lock 锁住当前使用的 package 源 以及 版本，无论你何时install 都是以这个为准，为此当你如论是主动还是被动的package.json进行的版本更新，都需要跟package-lock.json报备一下</li></ul></li><li><p>npm6</p></li></ul><p>​       此时npm的用户量这么这么多了， 安全问题 肯定提上了，毕竟是开源社区，所以npm6 主要就是从安全的方法进行了优化，我开头说的当package-lock.json上传到了github，过一阵子就给你邮件说这个包放弃了啥的，或者说这个需要升级了啥的，新增的 npm audit fix 也是这个原因。</p><h3 id="NPM全局命令"><a href="#NPM全局命令" class="headerlink" title="NPM全局命令"></a>NPM全局命令</h3><p>package.json bin =&gt; &lt; command &gt; : &lt; path &gt;</p><p>npm link / npm i .  -g</p><p>如果说需要 类似这种的 -v —version -help d这种 可以自行require(‘commander’)</p><p>这里可以说一下 package 的定义(符合下列要求之一即可)：</p><p>​    a) 包括程序和藐视该程序的package.json</p><p>​    b) 包括(a)的gzip压缩文件</p><p>​    c) 可以下载得到 (b) 资源的 url (通常是 http(s) url)</p><p>​    d) 一个格式为 <code>&lt;name&gt;@&lt;version&gt;</code> 的字符串，可指向 npm 源(通常是官方源 npmjs.org)上已发布的可访问 url，且该 url 满足条件 (c)</p><p>​    e)一个格式为 <code>&lt;name&gt;@&lt;tag&gt;</code> 的字符串，在 npm 源上该<code>&lt;tag&gt;</code>指向某 <code>&lt;version&gt;</code> 得到 <code>&lt;name&gt;@&lt;version&gt;</code>，后者满足条件 (d)</p><p>​    f)  一个格式为 <code>&lt;name&gt;</code> 的字符串，默认添加 <code>latest</code> 标签所得到的 <code>&lt;name&gt;@latest</code> 满足条件 (e)</p><p>​    g) 一个 git url, 该 url 所指向的代码库满足条件 (a)</p><h3 id="NPM-install-update流程图"><a href="#NPM-install-update流程图" class="headerlink" title="NPM install / update流程图"></a>NPM install / update流程图</h3><p><img src="http://qiniu.mrshulan.com/npminstall%E6%B5%81%E7%A8%8B%E5%9B%BE.png" alt="npm流程图"></p><p>如果使用的时候cnpm等第三方registry没有注册该package时候，回主动回源拉取(类似CDN)</p><h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://juejin.im/post/5ab3f77df265da2392364341" target="_blank" rel="noopener">2018 年了，你还是只会 npm install 吗？</a></p>]]></content>
+    
+    <summary type="html">
+    
+      npm install npm update原理剖析
+    
+    </summary>
+    
+      <category term="笔记" scheme="https://mrshulan.com/categories/%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="npm" scheme="https://mrshulan.com/tags/npm/"/>
+    
+  </entry>
   
   <entry>
     <title>WebSocket初探</title>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://mrshulan.com/"/>
-  <updated>2019-06-20T13:49:41.294Z</updated>
+  <updated>2019-07-11T15:49:47.728Z</updated>
   <id>https://mrshulan.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>npm依赖包问题记录</title>
+    <link href="https://mrshulan.com/2019/07/11/npm%E4%BE%9D%E8%B5%96%E5%8C%85/"/>
+    <id>https://mrshulan.com/2019/07/11/npm依赖包/</id>
+    <published>2019-07-11T15:44:59.000Z</published>
+    <updated>2019-07-11T15:49:47.728Z</updated>
+    
+    <content type="html"><![CDATA[<p class="description"></p><p><img src="https://" alt="" style="width:100%"></p><a id="more"></a><ul><li>主要对于npm生命周期理解 （类比mongoose提供的一起周期钩子)</li><li>基础包里边经常涉及到的有prepare install publish的使用，这里有个点，也就是在npm官方的document里边说道，<code>Run BEFORE the package is packed and published</code>,这里在阮一峰老师博客里边解释成为了 before install之前触发。</li><li>今天遇到一个从clone 到 npm i 此时 npm 先install了 然后主动触发 npm run prebublish，然后一连串的继发，第一次没有注意过程是否在install 更关心 prebublish为何触发了， 看过阮老师的解释之后，为此我<strong>又</strong> npm i一下 此时没有出现install过程，有prepublish的继发过程，问题来了，prepublish里边底层依赖这些是怎么来的？明明是install之前，module bin指令是不存在的。</li><li>问题溯源<ul><li>找dependencies，去node_modules里头找 没有，缓存问题？不对不对，去gitlab上看看他的package.json，似乎都是一些散包，不过这里发现了wxa-scaffold，这个包里边有着响应的bin指令，其build，config响应的文件都对应上了，config对应minxins的插入，build对应package.json的xxx:lib字段，迁移wxa-xxx模块到项目当中。</li><li>此外， xxx 这样的集成指令，找到.xxxrc plugins 对应sdk 之后 generate会 会找到.msi文件，而然在这里，处理这个的不是在meili本身而是他所集成的插件plugin,这里config对于processor的处理(fs)。</li><li>到这里知道了个大概流程，那么到底是有没有install？为此我从新clone了一下，有progress进度条，可以，说明他在install之后，回到官方文档说的packed，加上package.json main字就算作是一个包。</li></ul></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      使用集成依赖的脚手架的一些思考
+    
+    </summary>
+    
+      <category term="笔记" scheme="https://mrshulan.com/categories/%E7%AC%94%E8%AE%B0/"/>
+    
+    
+      <category term="npm" scheme="https://mrshulan.com/tags/npm/"/>
+    
+  </entry>
   
   <entry>
     <title>NPM一知半解</title>
